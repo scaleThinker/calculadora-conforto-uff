@@ -139,59 +139,58 @@ with col_esquerda:
         else:
             st.error("Por favor, selecione um material válido dentro das categorias.")
 
-    # 7. Listagem e Processamento Dinamico das Camadas
+     # 7. Listagem e Processamento Dinamico das Camadas com Edicao Independente
     R_camadas = 0.0
     C_total = 0.0
 
     if st.session_state.camadas:
         st.write("#### Camadas Atuais (De fora para dentro):")
-        for idx, cam in enumerate(st.session_state.camadas):
-            esp_m = cam["espessura"] / 100.0
+        
+        # Criamos uma copia da lista para evitar erros de mudanca de tamanho durante o loop
+        camadas_atuais = list(st.session_state.camadas)
+        
+        for idx, cam in enumerate(camadas_atuais):
+            esp_m = cam["espessura"] / 100.0  # Conversao de cm para metros
             
             if cam["material"] == "Câmara de Ar Não Ventilada":
                 R_camada = 0.18
                 C_camada = 0.0
-                st.text(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm")
+                texto_exibicao = f"C{idx+1}: {cam['material']} | {cam['espessura']} cm"
             else:
                 props = todos_materiais[cam["material"]]
                 R_camada = esp_m / props["lambda"]
                 C_camada = esp_m * props["densidade"] * props["calor_espe"]
-                st.text(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm (λ: {props['lambda']})")
-                
+                texto_exibicao = f"C{idx+1}: {cam['material']} | {cam['espessura']} cm (λ: {props['lambda']})"
+            
+            # Interface de controle individual por linha da camada
+            col_txt, col_subir, col_descer, col_excluir = st.columns([3.0, 0.5, 0.5, 0.5])
+            
+            with col_txt:
+                st.text(texto_exibicao)
+            with col_subir:
+                # Botao para subir a camada na estrutura (so aparece se nao for a primeira)
+                if st.button("▲", key=f"subir_{idx}") and idx > 0:
+                    st.session_state.camadas[idx], st.session_state.camadas[idx-1] = st.session_state.camadas[idx-1], st.session_state.camadas[idx]
+                    st.rerun()
+            with col_descer:
+                # Botao para descer a camada na estrutura (so aparece se nao for a ultima)
+                if st.button("▼", key=f"descer_{idx}") and idx < len(camadas_atuais) - 1:
+                    st.session_state.camadas[idx], st.session_state.camadas[idx+1] = st.session_state.camadas[idx+1], st.session_state.camadas[idx]
+                    st.rerun()
+            with col_excluir:
+                # Botao para deletar apenas esta camada especifica
+                if st.button("❌", key=f"deletar_{idx}"):
+                    st.session_state.camadas.pop(idx)
+                    st.rerun()
+            
             R_camadas += R_camada
             C_total += C_camada
 
+        st.write("")
         if st.button("Limpar Todas as Camadas"):
             st.session_state.camadas = []
             st.rerun()
 
-with col_direita:
-    st.markdown("### Esquema Gráfico")
-    if st.session_state.camadas:
-        fig, ax = plt.subplots(figsize=(5, 3))
-        acumulado = 0.0
-        
-        for idx, cam in enumerate(st.session_state.camadas):
-            label_curto = cam["material"][:20] + "..." if len(cam["material"]) > 20 else cam["material"]
-            ax.barh(0, cam["espessura"], left=acumulado, height=0.6, edgecolor='black', 
-                    label=f"C{idx+1}: {label_curto} ({cam['espessura']} cm)")
-            acumulado += cam["espessura"]
-            
-        ax.set_yticks([])
-        ax.set_ylim(-0.5, 0.5)
-        ax.set_xlabel("Espessura Total (cm)")
-        
-        ax.text(-0.02, 0.4, "EXTERNO", transform=ax.get_yaxis_transform(), ha='right', va='center', fontweight='bold', fontsize=9, color='blue')
-        ax.text(acumulado + 0.02, 0.4, "INTERNO", transform=ax.get_yaxis_transform(), ha='left', va='center', fontweight='bold', fontsize=9, color='red')
-        
-        ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3), ncol=1, frameon=True, fontsize=8)
-        
-        for spine in ["top", "left", "right"]:
-            ax.spines[spine].set_visible(False)
-            
-        st.pyplot(fig)
-    else:
-        st.info("Adicione camadas para visualizar o desenho da seção transversal aqui.")
 
 # 8. Renderizacao dos Resultados Finais
 if R_camadas > 0:
