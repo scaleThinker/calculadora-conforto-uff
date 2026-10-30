@@ -179,7 +179,7 @@ if st.session_state.camadas:
         st.session_state.camadas = []
         st.rerun()
 
-# #SESSÃO 9: Diagrama Esquemático Espacial das Camadas (Mobile-First Corrigido)
+# #SESSÃO 9: Diagrama Esquemático Espacial das Camadas (Mobile-First Proporcional)
 if st.session_state.camadas:
     st.write("---")
     st.markdown("### Diagrama do Elemento (Ext → Int)")
@@ -195,18 +195,18 @@ if st.session_state.camadas:
             nome_m = camada["material"]
             if nome_m in todos_materiais:
                 esp_cm = camada["espessura"]
-                proporcao = (esp_cm / espessura_total) * 200
-                altura_px = max(int(proporcao), 35)
+                # Correção: Multiplicador ampliado para 500 e mínimo reduzido para 25 para dar precisão visual a pequenas variações
+                proporcao = (esp_cm / espessura_total) * 500
+                altura_px = max(int(proporcao), 25)
                 cor = cores_paleta[idx % len(cores_paleta)]
                 
-                # Correção: HTML linearizado em uma única linha de string para evitar falha de parse no Markdown do Streamlit
                 html_diagrama += f"<div style='background-color: {cor}; height: {altura_px}px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; color: #fff; font-weight: bold; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.3);'><span>Camada {idx+1}: {nome_m}</span><span style='background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 3px;'>{esp_cm} cm</span></div>"
         
         html_diagrama += '</div>'
         
-        # Renderização forçada e segura como HTML puro
         st.markdown(html_diagrama, unsafe_allow_html=True)
         st.caption(f"Espessura total do elemento construtivo: {espessura_total:.1f} cm")
+
 
 
 # #SESSÃO 10: Memorial de Cálculo e Formulação Normativa (NBR 15220-2)
