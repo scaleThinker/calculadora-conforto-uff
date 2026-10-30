@@ -178,8 +178,57 @@ if st.session_state.camadas:
     if st.button("Limpar Todas as Camadas"):
         st.session_state.camadas = []
         st.rerun()
-# #SESSÃO 9: Memorial de Cálculo e Formulação Normativa (NBR 15220-2)
-with st.expander("Conferência Manual: Como calcular passo a passo"):
+
+# #SESSÃO 9: Diagrama Esquemático Espacial das Camadas (Mobile-First)
+if st.session_state.camadas:
+    st.write("---")
+    st.markdown("### Diagrama do Elemento (Ext → Int)")
+    
+    # Lista de cores sóbrias e contrastantes para diferenciar as camadas no celular
+    cores_paleta = ["#4A90E2", "#50E3C2", "#F5A623", "#E2849A", "#B8E986", "#9B51E0", "#4A4A4A"]
+    
+    # 1. Determina a espessura total para fazer o cálculo proporcional das barras
+    espessura_total = sum(camada["espessura"] for camada in st.session_state.camadas if camada["material"] in todos_materiais)
+    
+    if espessura_total > 0:
+        html_diagrama = '<div style="display: flex; flex-direction: column; width: 100%; border: 2px solid #333; border-radius: 4px; overflow: hidden; background-color: #f9f9f9;">'
+        
+        for idx, camada in enumerate(st.session_state.camadas):
+            nome_m = camada["material"]
+            if nome_m in todos_materiais:
+                esp_cm = camada["espessura"]
+                # Calcula a proporção de altura que o retângulo vai ocupar na tela (mínimo de 35px para o texto caber)
+                proporcao = (esp_cm / espessura_total) * 200
+                altura_px = max(int(proporcao), 35)
+                cor = cores_paleta[idx % len(cores_paleta)]
+                
+                # Cria a barra horizontal representando a camada do material
+                html_diagrama += f"""
+                <div style="
+                    background-color: {cor}; 
+                    height: {altura_px}px; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: space-between; 
+                    padding: 0 15px; 
+                    color: #fff; 
+                    font-weight: bold; 
+                    font-size: 13px;
+                    border-bottom: 1px solid rgba(255,255,255,0.3);
+                ">
+                    <span>Camada {idx+1}: {nome_m}</span>
+                    <span style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 3px;">{esp_cm} cm</span>
+                </div>
+                """
+        
+        html_diagrama += '</div>'
+        
+        # Renderiza o container HTML seguro e responsivo no Streamlit
+        st.markdown(html_diagrama, unsafe_allow_html=True)
+        st.caption(f"Espessura total do elemento construtivo: {espessura_total:.1f} cm")
+
+# #SESSÃO 10: Memorial de Cálculo e Formulação Normativa (NBR 15220-2)
+with st.expander("Para saber mais:"):
     st.markdown("""
     Para conferir os resultados na ponta do lápis seguindo a **ABNT NBR 15220-2**, siga as etapas abaixo:
 
