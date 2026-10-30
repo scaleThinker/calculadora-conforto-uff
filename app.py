@@ -179,7 +179,7 @@ if st.session_state.camadas:
         st.session_state.camadas = []
         st.rerun()
 
-# #SESSÃO 9: Diagrama Esquemático Espacial das Camadas (Mobile-First Proporcional)
+# #SESSÃO 9: Diagrama Esquemático Espacial Dinâmico (Mobile-First)
 if st.session_state.camadas:
     st.write("---")
     st.markdown("### Diagrama do Elemento (Ext → Int)")
@@ -189,25 +189,41 @@ if st.session_state.camadas:
     espessura_total = sum(camada["espessura"] for camada in st.session_state.camadas if camada["material"] in todos_materiais)
     
     if espessura_total > 0:
-        html_diagrama = '<div style="display: flex; flex-direction: column; width: 100%; border: 2px solid #333; border-radius: 4px; overflow: hidden; background-color: #f9f9f9;">'
+        # Determina a orientação do flexbox com base no tipo de fluxo selecionado
+        is_parede = "Horizontal" in tipo_fluxo
+        
+        if is_parede:
+            # Layout de Parede: camadas dispostas horizontalmente (lado a lado), expandindo na largura
+            html_diagrama = '<div style="display: flex; flex-direction: row; width: 100%; min-height: 180px; border: 2px solid #333; border-radius: 4px; overflow: hidden; background-color: #f9f9f9;">'
+        else:
+            # Layout de Cobertura: camadas empilhadas verticalmente, expandindo na altura
+            html_diagrama = '<div style="display: flex; flex-direction: column; width: 100%; border: 2px solid #333; border-radius: 4px; overflow: hidden; background-color: #f9f9f9;">'
         
         for idx, camada in enumerate(st.session_state.camadas):
             nome_m = camada["material"]
             if nome_m in todos_materiais:
                 esp_cm = camada["espessura"]
-                # Correção: Multiplicador ampliado para 500 e mínimo reduzido para 25 para dar precisão visual a pequenas variações
-                proporcao = (esp_cm / espessura_total) * 500
-                altura_px = max(int(proporcao), 25)
                 cor = cores_paleta[idx % len(cores_paleta)]
                 
-                html_diagrama += f"<div style='background-color: {cor}; height: {altura_px}px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; color: #fff; font-weight: bold; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.3);'><span>Camada {idx+1}: {nome_m}</span><span style='background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 3px;'>{esp_cm} cm</span></div>"
+                if is_parede:
+                    # Para paredes, controlamos a LARGURA proporcional (width) de cada bloco
+                    proporcao = (esp_cm / espessura_total) * 100
+                    html_diagrama += f"""
+                    <div style='background-color: {cor}; width: {proporcao}%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 15px 5px; color: #fff; font-weight: bold; font-size: 11px; text-align: center; border-right: 1px solid rgba(255,255,255,0.3); box-sizing: border-box;'>
+                        <span style='writing-mode: vertical-rl; transform: rotate(180deg); margin: auto; text-orientation: mixed;'>Camada {idx+1}: {nome_m}</span>
+                        <span style='background: rgba(0,0,0,0.2); padding: 2px 4px; border-radius: 3px; font-size: 10px; margin-top: 5px; white-space: nowrap;'>{esp_cm} cm</span>
+                    </div>
+                    """
+                else:
+                    # Para coberturas, mantemos o controle de ALTURA proporcional (height)
+                    proporcao = (esp_cm / espessura_total) * 500
+                    altura_px = max(int(proporcao), 25)
+                    html_diagrama += f"<div style='background-color: {cor}; height: {altura_px}px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; color: #fff; font-weight: bold; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.3);'><span>Camada {idx+1}: {nome_m}</span><span style='background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 3px;'>{esp_cm} cm</span></div>"
         
         html_diagrama += '</div>'
         
         st.markdown(html_diagrama, unsafe_allow_html=True)
         st.caption(f"Espessura total do elemento construtivo: {espessura_total:.1f} cm")
-
-
 
 # #SESSÃO 10: Memorial de Cálculo e Formulação Normativa (NBR 15220-2)
 with st.expander("Para saber mais:"):
