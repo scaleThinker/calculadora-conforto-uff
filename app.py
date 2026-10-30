@@ -184,4 +184,6 @@ if st.session_state.camadas:
 
 st.write("---")
 st.caption("Desenvolvido para fins didáticos — Disciplina de Conforto Ambiental I (EAU UFF)")
-st.caption("Colaboração: Estágio Docente")
+st.caption("Desenvolvedor: Brendo Tavares dos Santos")
+st.caption("brendotavares@id.uff.br")
+st.caption("2026")
