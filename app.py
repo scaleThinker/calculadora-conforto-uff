@@ -88,7 +88,7 @@ with st.expander("Criar Material Customizado para esta Sessão"):
 
 # 6. Secao de Adicao de Camadas a Composicao
 st.markdown("### Composição do Elemento")
-col_l1, col_l2 = st.columns()
+col_l1, col_l2 = st.columns(2)
 with col_l1:
     opcoes_selecao = list(todos_materiais.keys()) + ["Câmara de Ar Não Ventilada"]
     material_sel = st.selectbox("Selecione o Material:", opcoes_selecao)
