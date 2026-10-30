@@ -51,13 +51,13 @@ if 'materiais_custom' not in st.session_state:
 # Combina a lista fixa com os materiais criados pelo aluno na sessao corrente
 todos_materiais = {**materiais_padrao, **st.session_state.materiais_custom}
 
-# 4. Definicao das condicoes de contorno (Resistencias Superficiais NBR 15220-2)
+# 4. Definicao das condicoes de contorno com nomenclatura direta por fluxo físico
 tipo_fluxo = st.selectbox(
     "Tipo de Elemento / Fluxo de Calor:", 
-    ["Parede (Fluxo Horizontal)", "Cobertura/Teto (Fluxo Descendente - Verão)"]
+    ["Fluxo Horizontal (Paredes)", "Fluxo Descendente (Coberturas)"]
 )
 
-if "Parede" in tipo_fluxo:
+if "Horizontal" in tipo_fluxo:
     R_superficial = 0.13 + 0.04  # Rsi + Rse = 0.17 m²K/W
 else:
     R_superficial = 0.17 + 0.04  # Rsi + Rse = 0.21 m²K/W
@@ -86,7 +86,7 @@ with st.expander("Criar Material Customizado para esta Sessão"):
         else:
             st.error("Por favor, digite um nome para o material customizado.")
 
-# 6. Secao de Adicao de Camadas a Composicao
+# 6. Secao de Adicao de Camadas a Composicao com correcao do argumento das colunas
 st.markdown("### Composição do Elemento")
 col_l1, col_l2 = st.columns(2)
 with col_l1:
