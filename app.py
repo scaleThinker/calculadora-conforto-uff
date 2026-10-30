@@ -36,18 +36,31 @@ materiais_padrao = {
     "Forro ou tábua de madeira": {"lambda": 0.13, "densidade": 600, "calor_espe": 1.34, "esp_padrao": 1.0, "cat": "Coberturas e Forros"},
     "Telha cerâmica": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 1.0, "cat": "Coberturas e Forros"},
     "Telha de fibrocimento": {"lambda": 0.65, "densidade": 1900, "calor_espe": 0.84, "esp_padrao": 0.6, "cat": "Coberturas e Forros"},
-    "Telha metálica simples": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "esp_padrao": 0.05, "cat": "Coberturas e Forros"}, # Correção: Espessura real de mercado (0.5mm)
+    "Telha metálica simples": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "esp_padrao": 0.05, "cat": "Coberturas e Forros"},
+    "Telha sanduíche termoacústica (EPS)": {"lambda": 0.038, "densidade": 30, "calor_espe": 1.45, "esp_padrao": 5.0, "cat": "Coberturas e Forros"}, # Nova: Propriedades equivalentes combinadas do sanduíche de mercado
     
     # Isolantes Térmicos
     "Lã de vidro / Lã mineral": {"lambda": 0.04, "densidade": 40, "calor_espe": 0.80, "esp_padrao": 5.0, "cat": "Isolantes Térmicos"},
     "Poliestireno expandido (EPS)": {"lambda": 0.04, "densidade": 20, "calor_espe": 1.45, "esp_padrao": 3.0, "cat": "Isolantes Térmicos"},
     "Poliuretano expandido (PU)": {"lambda": 0.03, "densidade": 35, "calor_espe": 1.40, "esp_padrao": 3.0, "cat": "Isolantes Térmicos"},
     
+    # Câmaras de Ar Estanques Desmembradas (Mapeamento do diagrama Honeybee/NBR 15220)
+    "Câmara de Ar Estanque (5 mm)": {"r_horiz": 0.10, "r_vert": 0.10, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 0.5, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Estanque (7 mm)": {"r_horiz": 0.12, "r_vert": 0.12, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 0.7, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Estanque (10 mm)": {"r_horiz": 0.14, "r_vert": 0.14, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 1.0, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Estanque (15 mm)": {"r_horiz": 0.15, "r_vert": 0.15, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 1.5, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Estanque (20 a 24 mm)": {"r_horiz": 0.16, "r_vert": 0.17, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 2.0, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Estanque (25 a 49 mm)": {"r_horiz": 0.16, "r_vert": 0.17, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 3.0, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Estanque (50 a 99 mm)": {"r_horiz": 0.16, "r_vert": 0.19, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 5.0, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Estanque (100 a 299 mm)": {"r_horiz": 0.16, "r_vert": 0.20, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 15.0, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Estanque (≥ 300 mm)": {"r_horiz": 0.16, "r_vert": 0.21, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 30.0, "cat": "Câmaras de Ar"},
+    
     # Outros Materiais
-    "Câmara de Ar Não Ventilada": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 2.0, "cat": "Outros Materiais"}, # Correção: Desvia do cálculo tradicional
     "Solo compactado (Taipa/Adobe)": {"lambda": 1.00, "densidade": 1800, "calor_espe": 1.00, "esp_padrao": 30.0, "cat": "Outros Materiais"},
     "Vidro comum": {"lambda": 1.00, "densidade": 2500, "calor_espe": 0.80, "esp_padrao": 0.6, "cat": "Outros Materiais"}
 }
+
+#Sessão 4
 
 if 'camadas' not in st.session_state:
     st.session_state.camadas = []
@@ -100,7 +113,7 @@ with st.expander("Criar Material Customizado para esta Sessão"):
 st.markdown("### Composição do Elemento")
 
 # 1. Filtro de Categorias (Garante navegação rápida no ambiente mobile)
-categorias_disponiveis = ["Alvenarias e Blocos de Vedação", "Concretos", "Revestimentos e Argamassas", "Coberturas e Forros", "Isolantes Térmicos", "Outros Materiais"]
+categorias_disponiveis = ["Alvenarias e Blocos de Vedação","Câmaras de Ar", "Concretos", "Revestimentos e Argamassas", "Coberturas e Forros", "Isolantes Térmicos", "Outros Materiais"]
 if st.session_state.materiais_custom:
     categorias_disponiveis.append("Customizados")
 
