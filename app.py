@@ -95,44 +95,40 @@ with st.expander("Criar Material Customizado para esta Sessão"):
         else:
             st.error("Por favor, digite um nome para o material customizado.")
 
-# Sessão 7: Composição do Elemento Construtivo e Automação de Espessuras
+# Sessão 7: Composição do Elemento Construtivo e Filtro de Materiais por Categoria
 st.markdown("### Composição do Elemento")
 
-categorias_ordem = ["Alvenarias e Blocos de Vedação", "Concretos", "Revestimentos e Argamassas", "Coberturas e Forros", "Isolantes Térmicos", "Outros Materiais", "Customizados"]
+# 1. Filtro de Categorias (Garante navegação rápida no ambiente mobile)
+categorias_disponiveis = ["Alvenarias e Blocos de Vedação", "Concretos", "Revestimentos e Argamassas", "Coberturas e Forros", "Isolantes Térmicos", "Outros Materiais"]
+if st.session_state.materiais_custom:
+    categorias_disponiveis.append("Customizados")
 
-opcoes_formatadas = []
-mapa_nomes_reais = {}
+categoria_sel = st.selectbox("1. Escolha a Categoria:", categorias_disponiveis)
 
-for cat in categorias_ordem:
-    materiais_da_cat = sorted([nome for nome, dados in todos_materiais.items() if dados["cat"] == cat])
-    if materiais_da_cat:
-        opcoes_formatadas.append(f"--- {cat.upper()} ---")
-        for mat in materiais_da_cat:
-            nome_exibicao = f"   {mat}"
-            opcoes_formatadas.append(nome_exibicao)
-            mapa_nomes_reais[nome_exibicao] = mat
+# 2. Filtragem dinâmica do banco de dados baseado na categoria selecionada
+materiais_filtrados = sorted([
+    nome for nome, dados in todos_materiais.items() if dados["cat"] == categoria_sel
+])
 
-if 'index_selecionado' not in st.session_state:
-    st.session_state.index_selecionado = 1
+# 3. Seleção do material específico dentro da categoria limpa
+material_sel = st.selectbox("2. Selecione o Material:", materiais_filtrados)
 
-material_sel_formatado = st.selectbox("Selecione o Material:", opcoes_formatadas, index=st.session_state.index_selecionado)
-item_valido = "---" not in material_sel_formatado
-
-material_sel = mapa_nomes_reais.get(material_sel_formatado, None) if item_valido else None
-
-if item_valido and material_sel:
+# 4. Busca automática da espessura padrão cadastrada na Sessão 3
+if material_sel:
     espessura_inicial = todos_materiais[material_sel]["esp_padrao"]
 else:
     espessura_inicial = 2.5
 
 espessura_sel = st.number_input("Espessura (cm):", min_value=0.1, max_value=100.0, value=espessura_inicial, step=0.5)
 
+# 5. Inserção segura na lista de camadas do Session State
 if st.button("Adicionar Camada"):
-    if item_valido and material_sel:
+    if material_sel:
         st.session_state.camadas.append({"material": material_sel, "espessura": espessura_sel})
         st.rerun()
     else:
-        st.error("Por favor, selecione um material válido dentro das categorias.")
+        st.error("Por favor, selecione um material válido.")
+
 
 # Sessão 8: Lista de Camadas Inseridas, Cálculos da NBR 15220-2 e Créditos
 R_camadas = 0.0
