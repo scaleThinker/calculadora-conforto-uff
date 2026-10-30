@@ -8,6 +8,7 @@ st.subheader("Calculadora de Propriedades Térmicas")
 st.write("Metodologia baseada estritamente na ABNT NBR 15220-2.")
 st.caption("⚠️ Importante: Insira as camadas ordenadas obrigatoriamente do EXTERIOR para o INTERIOR.")
 
+# #SESSÃO 3: Banco de Dados de Materiais Normativos
 materiais_padrao = {
     # Alvenarias e Blocos de Vedação
     "Bloco cerâmico furado (9 cm)": {"lambda": 0.70, "densidade": 1200, "calor_espe": 0.92, "esp_padrao": 9.0, "cat": "Alvenarias e Blocos de Vedação"},
@@ -35,7 +36,7 @@ materiais_padrao = {
     "Forro ou tábua de madeira": {"lambda": 0.13, "densidade": 600, "calor_espe": 1.34, "esp_padrao": 1.0, "cat": "Coberturas e Forros"},
     "Telha cerâmica": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 1.0, "cat": "Coberturas e Forros"},
     "Telha de fibrocimento": {"lambda": 0.65, "densidade": 1900, "calor_espe": 0.84, "esp_padrao": 0.6, "cat": "Coberturas e Forros"},
-    "Telha metálica simples": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "esp_padrao": 0.1, "cat": "Coberturas e Forros"},
+    "Telha metálica simples": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "esp_padrao": 0.05, "cat": "Coberturas e Forros"}, # Correção: Espessura real de mercado (0.5mm)
     
     # Isolantes Térmicos
     "Lã de vidro / Lã mineral": {"lambda": 0.04, "densidade": 40, "calor_espe": 0.80, "esp_padrao": 5.0, "cat": "Isolantes Térmicos"},
@@ -43,7 +44,7 @@ materiais_padrao = {
     "Poliuretano expandido (PU)": {"lambda": 0.03, "densidade": 35, "calor_espe": 1.40, "esp_padrao": 3.0, "cat": "Isolantes Térmicos"},
     
     # Outros Materiais
-    "Câmara de Ar Não Ventilada": {"lambda": 0.0, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 2.0, "cat": "Outros Materiais"},
+    "Câmara de Ar Não Ventilada": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 2.0, "cat": "Outros Materiais"}, # Correção: Desvia do cálculo tradicional
     "Solo compactado (Taipa/Adobe)": {"lambda": 1.00, "densidade": 1800, "calor_espe": 1.00, "esp_padrao": 30.0, "cat": "Outros Materiais"},
     "Vidro comum": {"lambda": 1.00, "densidade": 2500, "calor_espe": 0.80, "esp_padrao": 0.6, "cat": "Outros Materiais"}
 }
