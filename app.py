@@ -64,16 +64,16 @@ else:
 
 st.write("---")
 
-# 5. Secao de Criacao de Material Customizado simplificada
+# 5. Secao de Criacao de Material Customizado simplificada com propriedades físicas explicitas
 with st.expander("Criar Material Customizado para esta Sessão"):
-    st.write("Insira o nome e a condutividade do material. Os dados de densidade e calor específico são opcionais.")
+    st.write("Insira o nome e a condutividade térmica do material. Os dados de densidade de massa e calor específico são opcionais.")
     c_nome = st.text_input("Nome do Material Customizado:", placeholder="Ex: Tijolo Ecológico")
     
     col_c1, col_c2, col_c3 = st.columns(3)
     with col_c1:
-        c_lambda = st.number_input("Condutividade (lambda) [W/m·K]:", min_value=0.01, max_value=400.0, value=1.00, step=0.05)
+        c_lambda = st.number_input("Condutividade Térmica (λ) [W/m·K]:", min_value=0.01, max_value=400.0, value=1.00, step=0.05)
     with col_c2:
-        c_densidade = st.number_input("Densidade (rho) [kg/m³] (Opcional):", min_value=0, max_value=10000, value=0, step=50, help="Deixe zero para adotar o padrão de alvenarias")
+        c_densidade = st.number_input("Densidade de Massa (ρ) [kg/m³] (Opcional):", min_value=0, max_value=10000, value=0, step=50, help="Deixe zero para adotar o padrão de alvenarias")
     with col_c3:
         c_calor = st.number_input("Calor Específico (c) [kJ/kg·K] (Opcional):", min_value=0.0, max_value=5.0, value=0.0, step=0.1, help="Deixe zero para adotar o padrão de alvenarias")
         
@@ -83,7 +83,7 @@ with st.expander("Criar Material Customizado para esta Sessão"):
             densidade_final = c_densidade if c_densidade > 0 else 1200
             calor_final = c_calor if c_calor > 0.0 else 0.92
             
-            st.session_state.materials_custom[c_nome] = {
+            st.session_state.materiais_custom[c_nome] = {
                 "lambda": c_lambda, 
                 "densidade": densidade_final, 
                 "calor_espe": calor_final, 
@@ -124,7 +124,7 @@ if st.session_state.camadas:
             props = todos_materiais[cam["material"]]
             R_camada = esp_m / props["lambda"]
             C_camada = esp_m * props["densidade"] * props["calor_espe"]
-            st.text(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm")
+            st.text(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm (λ: {props['lambda']})")
             
         R_camadas += R_camada
         C_total += C_camada
