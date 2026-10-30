@@ -223,7 +223,7 @@ if st.session_state.camadas:
 if st.session_state.camadas:
     st.write("---")
     
-    with st.expander("Verificação de Desempenho Normativo (NBR 15575)"):
+    with st.expander("Verificação de Desempenho Normativo (NBR 15575 - 2024)"):
         st.write("Valide o componente construtivo frente aos limites de referência da NBR 15575.")
         
         # Filtragem das zonas consolidadas conforme os slides de aula
