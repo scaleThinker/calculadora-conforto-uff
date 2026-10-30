@@ -219,8 +219,57 @@ if st.session_state.camadas:
         st.markdown(html_diagrama, unsafe_allow_html=True)
         st.caption(f"Espessura total do elemento construtivo: {espessura_total:.1f} cm")
 
+# #SESSÃO 10: Verificação de Conformidade por Zona Bioclimática (ABNT NBR 15220-3)
+if st.session_state.camadas:
+    st.write("---")
+    st.markdown("### Verificação de Desempenho Normativo")
+    st.write("Selecione a zona bioclimática do projeto para validar os resultados obtidos frente aos limites da ABNT NBR 15220-3.")
+    
+    # Lista de zonas baseada na norma
+    zona_sel = st.selectbox(
+        "Escolha a Zona Bioclimática (ZBB):",
+        [f"Zona {i}" for i in range(1, 9)],
+        help="Niterói e Rio de Janeiro localizam-se na Zona 8"
+    )
+    
+    is_parede = "Horizontal" in tipo_fluxo
+    mensagem_validacao = ""
+    sucesso = True
+    
+    # Definição das condições de contorno de limites da NBR 15220-3 para habitações
+    if is_parede:
+        # Limites para Paredes Externas (Zonas 1 a 8)
+        if zona_sel in ["Zona 1", "Zona 2", "Zona 3", "Zona 4", "Zona 5", "Zona 6", "Zona 7"]:
+            # Zonas 1 a 7 exigem paredes pesadas (U <= 2.2 e C >= 130)
+            limite_U = 2.2
+            if U_final > limite_U:
+                mensagem_validacao += f"❌ Transmitância Térmica Incorreta: Para a {zona_sel}, o limite máximo permitido para paredes é U ≤ {limite_U} W/(m²·K).\n\n"
+                sucesso = False
+            if C_total < 130.0:
+                mensagem_validacao += f"❌ Capacidade Térmica Insuficiente: Para a {zona_sel}, recomenda-se alta inércia térmica (C ≥ 130 kJ/(m²·K)).\n\n"
+                sucesso = False
+        elif zona_sel == "Zona 8":
+            # Zona 8 (Niterói/RJ): Recomenda parede leve refletora (U <= 0.6) OU pesada (U <= 2.2 e C >= 130)
+            if U_final > 2.2:
+                mensagem_validacao += "❌ Transmitância Térmica Incorreta: Na Zona 8, a transmitância máxima permitida para paredes é U ≤ 2.2 W/(m²·K).\n\n"
+                sucesso = False
+            elif U_final > 0.6 and C_total < 130.0:
+                mensagem_validacao += "❌ Inércia Térmica Inadequada: Na Zona 8, se a parede não for leve refletora (U ≤ 0.6), ela deve obrigatoriamente ser pesada com C ≥ 130 kJ/(m²·K).\n\n"
+                sucesso = False
+    else:
+        # Limites para Coberturas (Fluxo Descendente)
+        limite_U = 2.0
+        if U_final > limite_U:
+            mensagem_validacao += f"❌ Transmitância Térmica Incorreta: Para coberturas na {zona_sel}, o limite máximo permitido é U ≤ {limite_U} W/(m²·K).\n\n"
+            sucesso = False
 
-# #SESSÃO 10: Memorial de Cálculo e Formulação Normativa (NBR 15220-2)
+    # Exibição do diagnóstico de conformidade para o estudante
+    if sucesso:
+        st.success(f"✅ Componente Aprovado! Os valores calculados atendem plenamente às diretrizes construtivas da ABNT NBR 15220-3 para a {zona_sel}.")
+    else:
+        st.error(mensagem_validacao)
+
+# #SESSÃO 11: Memorial de Cálculo e Formulação Normativa (NBR 15220-2)
 with st.expander("Para saber mais:"):
     st.markdown("""
     Para conferir os resultados na ponta do lápis seguindo a **ABNT NBR 15220-2**, siga as etapas abaixo:
