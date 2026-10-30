@@ -10,55 +10,59 @@ st.caption("⚠️ Importante: Insira as camadas ordenadas obrigatoriamente do E
 
 # #SESSÃO 3: Banco de Dados de Materiais Normativos
 materiais_padrao = {
-    # Alvenarias e Blocos de Vedação
-    "Bloco cerâmico furado (9 cm)": {"lambda": 0.70, "densidade": 1200, "calor_espe": 0.92, "esp_padrao": 9.0, "cat": "Alvenarias e Blocos de Vedação"},
-    "Bloco cerâmico furado (11.5 cm)": {"lambda": 0.70, "densidade": 1200, "calor_espe": 0.92, "esp_padrao": 11.5, "cat": "Alvenarias e Blocos de Vedação"},
-    "Bloco cerâmico estrutural (14 cm)": {"lambda": 1.05, "densidade": 1600, "calor_espe": 0.92, "esp_padrao": 14.0, "cat": "Alvenarias e Blocos de Vedação"},
-    "Bloco de concreto vedação (9 cm)": {"lambda": 1.40, "densidade": 1400, "calor_espe": 1.00, "esp_padrao": 9.0, "cat": "Alvenarias e Blocos de Vedação"},
-    "Bloco de concreto vedação (14 cm)": {"lambda": 1.40, "densidade": 1400, "calor_espe": 1.00, "esp_padrao": 14.0, "cat": "Alvenarias e Blocos de Vedação"},
-    "Bloco de concreto celular (10 cm)": {"lambda": 0.18, "densidade": 500, "calor_espe": 1.00, "esp_padrao": 10.0, "cat": "Alvenarias e Blocos de Vedação"},
-    "Tijolo cerâmico maciço comum": {"lambda": 0.85, "densidade": 1600, "calor_espe": 0.92, "esp_padrao": 5.7, "cat": "Alvenarias e Blocos de Vedação"},
-    "Tijolo ecológico / Solo-cimento": {"lambda": 1.00, "densidade": 1700, "calor_espe": 1.00, "esp_padrao": 12.5, "cat": "Alvenarias e Blocos de Vedação"},
+    # Alvenarias e Blocos de Vedação (Espessuras comerciais travadas)
+    "Bloco cerâmico furado (9 cm)": {"lambda": 0.70, "densidade": 1200, "calor_espe": 0.92, "esp_padrao": 9.0, "bloqueado": True, "cat": "Alvenarias e Blocos de Vedação"},
+    "Bloco cerâmico furado (11.5 cm)": {"lambda": 0.70, "densidade": 1200, "calor_espe": 0.92, "esp_padrao": 11.5, "bloqueado": True, "cat": "Alvenarias e Blocos de Vedação"},
+    "Bloco cerâmico estrutural (14 cm)": {"lambda": 1.05, "densidade": 1600, "calor_espe": 0.92, "esp_padrao": 14.0, "bloqueado": True, "cat": "Alvenarias e Blocos de Vedação"},
+    "Bloco de concreto vedação (9 cm)": {"lambda": 1.40, "densidade": 1400, "calor_espe": 1.00, "esp_padrao": 9.0, "bloqueado": True, "cat": "Alvenarias e Blocos de Vedação"},
+    "Bloco de concreto vedação (14 cm)": {"lambda": 1.40, "densidade": 1400, "calor_espe": 1.00, "esp_padrao": 14.0, "bloqueado": True, "cat": "Alvenarias e Blocos de Vedação"},
+    "Bloco de concreto celular (10 cm)": {"lambda": 0.18, "densidade": 500, "calor_espe": 1.00, "esp_padrao": 10.0, "bloqueado": True, "cat": "Alvenarias e Blocos de Vedação"},
+    "Tijolo cerâmico maciço comum": {"lambda": 0.85, "densidade": 1600, "calor_espe": 0.92, "esp_padrao": 5.7, "bloqueado": True, "cat": "Alvenarias e Blocos de Vedação"},
+    "Tijolo ecológico / Solo-cimento": {"lambda": 1.00, "densidade": 1700, "calor_espe": 1.00, "esp_padrao": 12.5, "bloqueado": True, "cat": "Alvenarias e Blocos de Vedação"},
     
-    # Concretos
-    "Concreto armado": {"lambda": 1.75, "densidade": 2500, "calor_espe": 1.00, "esp_padrao": 10.0, "cat": "Concretos"},
-    "Concreto simples": {"lambda": 1.40, "densidade": 2200, "calor_espe": 1.00, "esp_padrao": 8.0, "cat": "Concretos"},
+    # Concretos (Espessuras livres para lajes e pilares customizados)
+    "Concreto armado": {"lambda": 1.75, "densidade": 2500, "calor_espe": 1.00, "esp_padrao": 10.0, "bloqueado": False, "cat": "Concretos"},
+    "Concreto simples": {"lambda": 1.40, "densidade": 2200, "calor_espe": 1.00, "esp_padrao": 8.0, "bloqueado": False, "cat": "Concretos"},
     
-    # Revestimentos e Argamassas
-    "Argamassa cimento/areia (Reboco)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "esp_padrao": 2.5, "cat": "Revestimentos e Argamassas"},
-    "Argamassa de cal e areia": {"lambda": 0.85, "densidade": 1700, "calor_espe": 1.00, "esp_padrao": 2.0, "cat": "Revestimentos e Argamassas"},
-    "Gesso liso para revestimento": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "esp_padrao": 1.0, "cat": "Revestimentos e Argamassas"},
-    "Pedra natural para revestimento": {"lambda": 2.40, "densidade": 2600, "calor_espe": 1.00, "esp_padrao": 3.0, "cat": "Revestimentos e Argamassas"},
-    "Placa de gesso acartonado (Drywall)": {"lambda": 0.21, "densidade": 800, "calor_espe": 1.00, "esp_padrao": 1.25, "cat": "Revestimentos e Argamassas"},
+    # Revestimentos e Argamassas (Espessuras livres para regularização)
+    "Argamassa cimento/areia (Reboco)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "esp_padrao": 2.5, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
+    "Argamassa de cal e areia": {"lambda": 0.85, "densidade": 1700, "calor_espe": 1.00, "esp_padrao": 2.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
+    "Gesso liso para revestimento": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "esp_padrao": 1.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
+    "Pedra natural para revestimento": {"lambda": 2.40, "densidade": 2600, "calor_espe": 1.00, "esp_padrao": 3.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
+    "Placa de gesso acartonado (Drywall)": {"lambda": 0.21, "densidade": 800, "calor_espe": 1.00, "esp_padrao": 1.25, "bloqueado": True, "cat": "Revestimentos e Argamassas"},
     
-    # Coberturas e Forros
-    "Camada de impermeabilização (Asfalto)": {"lambda": 0.22, "densidade": 1100, "calor_espe": 1.00, "esp_padrao": 0.4, "cat": "Coberturas e Forros"},
-    "Forro ou tábua de madeira": {"lambda": 0.13, "densidade": 600, "calor_espe": 1.34, "esp_padrao": 1.0, "cat": "Coberturas e Forros"},
-    "Telha cerâmica": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 1.0, "cat": "Coberturas e Forros"},
-    "Telha de fibrocimento": {"lambda": 0.65, "densidade": 1900, "calor_espe": 0.84, "esp_padrao": 0.6, "cat": "Coberturas e Forros"},
-    "Telha metálica simples": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "esp_padrao": 0.05, "cat": "Coberturas e Forros"},
-    "Telha sanduíche termoacústica (EPS)": {"lambda": 0.038, "densidade": 30, "calor_espe": 1.45, "esp_padrao": 5.0, "cat": "Coberturas e Forros"}, # Nova: Propriedades equivalentes combinadas do sanduíche de mercado
+    # Coberturas e Forros (Componentes industriais travados)
+    "Camada de impermeabilização (Asfalto)": {"lambda": 0.22, "densidade": 1100, "calor_espe": 1.00, "esp_padrao": 0.4, "bloqueado": True, "cat": "Coberturas e Forros"},
+    "Forro ou tábua de madeira": {"lambda": 0.13, "densidade": 600, "calor_espe": 1.34, "esp_padrao": 1.0, "bloqueado": False, "cat": "Coberturas e Forros"},
+    "Telha cerâmica": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 1.0, "bloqueado": True, "cat": "Coberturas e Forros"},
+    "Telha de fibrocimento": {"lambda": 0.65, "densidade": 1900, "calor_espe": 0.84, "esp_padrao": 0.6, "bloqueado": True, "cat": "Coberturas e Forros"},
+    "Telha metálica simples (0.5 mm)": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "esp_padrao": 0.05, "bloqueado": True, "cat": "Coberturas e Forros"},
+    "Telha sanduíche (EPS 30 mm)": {"lambda": 0.038, "densidade": 40, "calor_espe": 1.40, "esp_padrao": 3.1, "bloqueado": True, "cat": "Coberturas e Forros"},
+    "Telha sanduíche (PU 30 mm)": {"lambda": 0.028, "densidade": 45, "calor_espe": 1.40, "esp_padrao": 3.1, "bloqueado": True, "cat": "Coberturas e Forros"},
     
-    # Isolantes Térmicos
-    "Lã de vidro / Lã mineral": {"lambda": 0.04, "densidade": 40, "calor_espe": 0.80, "esp_padrao": 5.0, "cat": "Isolantes Térmicos"},
-    "Poliestireno expandido (EPS)": {"lambda": 0.04, "densidade": 20, "calor_espe": 1.45, "esp_padrao": 3.0, "cat": "Isolantes Térmicos"},
-    "Poliuretano expandido (PU)": {"lambda": 0.03, "densidade": 35, "calor_espe": 1.40, "esp_padrao": 3.0, "cat": "Isolantes Térmicos"},
+    # Câmaras de Ar Normativas (Espessuras fixas indexadas de acordo com as tabelas do Grasshopper)
+    "Câmara de Ar Não Ventilada (5 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 0.5, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (7 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 0.7, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (10 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 1.0, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (15 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 1.5, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (20 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 2.0, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (25 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 2.5, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (50 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 5.0, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (100 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 10.0, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (200 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 20.0, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (300 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 30.0, "bloqueado": True, "cat": "Câmaras de Ar"},
+    "Câmara de Ar Não Ventilada (>300 mm)": {"lambda": None, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 35.0, "bloqueado": True, "cat": "Câmaras de Ar"},
     
-    # Câmaras de Ar Estanques Desmembradas (Mapeamento do diagrama Honeybee/NBR 15220)
-    "Câmara de Ar Estanque (5 mm)": {"r_horiz": 0.10, "r_vert": 0.10, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 0.5, "cat": "Câmaras de Ar"},
-    "Câmara de Ar Estanque (7 mm)": {"r_horiz": 0.12, "r_vert": 0.12, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 0.7, "cat": "Câmaras de Ar"},
-    "Câmara de Ar Estanque (10 mm)": {"r_horiz": 0.14, "r_vert": 0.14, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 1.0, "cat": "Câmaras de Ar"},
-    "Câmara de Ar Estanque (15 mm)": {"r_horiz": 0.15, "r_vert": 0.15, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 1.5, "cat": "Câmaras de Ar"},
-    "Câmara de Ar Estanque (20 a 24 mm)": {"r_horiz": 0.16, "r_vert": 0.17, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 2.0, "cat": "Câmaras de Ar"},
-    "Câmara de Ar Estanque (25 a 49 mm)": {"r_horiz": 0.16, "r_vert": 0.17, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 3.0, "cat": "Câmaras de Ar"},
-    "Câmara de Ar Estanque (50 a 99 mm)": {"r_horiz": 0.16, "r_vert": 0.19, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 5.0, "cat": "Câmaras de Ar"},
-    "Câmara de Ar Estanque (100 a 299 mm)": {"r_horiz": 0.16, "r_vert": 0.20, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 15.0, "cat": "Câmaras de Ar"},
-    "Câmara de Ar Estanque (≥ 300 mm)": {"r_horiz": 0.16, "r_vert": 0.21, "densidade": 0, "calor_espe": 0.0, "esp_padrao": 30.0, "cat": "Câmaras de Ar"},
+    # Isolantes Térmicos (Espessuras livres para dimensionamento do aluno)
+    "Lã de vidro / Lã mineral": {"lambda": 0.04, "densidade": 40, "calor_espe": 0.80, "esp_padrao": 5.0, "bloqueado": False, "cat": "Isolantes Térmicos"},
+    "Poliestireno expandido (EPS)": {"lambda": 0.04, "densidade": 20, "calor_espe": 1.45, "esp_padrao": 3.0, "bloqueado": False, "cat": "Isolantes Térmicos"},
+    "Poliuretano expandido (PU)": {"lambda": 0.03, "densidade": 35, "calor_espe": 1.40, "esp_padrao": 3.0, "bloqueado": False, "cat": "Isolantes Térmicos"},
     
     # Outros Materiais
-    "Solo compactado (Taipa/Adobe)": {"lambda": 1.00, "densidade": 1800, "calor_espe": 1.00, "esp_padrao": 30.0, "cat": "Outros Materiais"},
-    "Vidro comum": {"lambda": 1.00, "densidade": 2500, "calor_espe": 0.80, "esp_padrao": 0.6, "cat": "Outros Materiais"}
+    "Solo compactado (Taipa/Adobe)": {"lambda": 1.00, "densidade": 1800, "calor_espe": 1.00, "esp_padrao": 30.0, "bloqueado": False, "cat": "Outros Materiais"},
+    "Vidro comum": {"lambda": 1.00, "densidade": 2500, "calor_espe": 0.80, "esp_padrao": 0.6, "bloqueado": True, "cat": "Outros Materiais"}
 }
+
 
 #Sessão 4
 
@@ -109,39 +113,44 @@ with st.expander("Criar Material Customizado para esta Sessão"):
         else:
             st.error("Por favor, digite um nome para o material customizado.")
 
-# Sessão 7: Composição do Elemento Construtivo e Filtro de Materiais por Categoria
+# #SESSÃO 7: Composição do Elemento Construtivo e Filtros Dinâmicos
 st.markdown("### Composição do Elemento")
 
-# 1. Filtro de Categorias (Garante navegação rápida no ambiente mobile)
-categorias_disponiveis = ["Alvenarias e Blocos de Vedação","Câmaras de Ar", "Concretos", "Revestimentos e Argamassas", "Coberturas e Forros", "Isolantes Térmicos", "Outros Materiais"]
+# 1. Filtro rápido de Categorias
+categorias_disponiveis = ["Alvenarias e Blocos de Vedação", "Concretos", "Revestimentos e Argamassas", "Coberturas e Forros", "Câmaras de Ar", "Isolantes Térmicos", "Outros Materiais"]
 if st.session_state.materiais_custom:
     categorias_disponiveis.append("Customizados")
 
 categoria_sel = st.selectbox("1. Escolha a Categoria:", categorias_disponiveis)
 
-# 2. Filtragem dinâmica do banco de dados baseado na categoria selecionada
+# 2. Filtragem dos materiais baseados no grupo
 materiais_filtrados = sorted([
     nome for nome, dados in todos_materiais.items() if dados["cat"] == categoria_sel
 ])
 
-# 3. Seleção do material específico dentro da categoria limpa
 material_sel = st.selectbox("2. Selecione o Material:", materiais_filtrados)
 
-# 4. Busca automática da espessura padrão cadastrada na Sessão 3
+# 3. Trava de espessura de acordo com as propriedades normativas do material
 if material_sel:
     espessura_inicial = todos_materiais[material_sel]["esp_padrao"]
+    deve_bloquear = todos_materiais[material_sel].get("bloqueado", False)
 else:
     espessura_inicial = 2.5
+    deve_bloquear = False
 
-espessura_sel = st.number_input("Espessura (cm):", min_value=0.1, max_value=100.0, value=espessura_inicial, step=0.5)
+# O parâmetro disabled=deve_bloquear congela o input impossibilitando o aluno de digitar
+if deve_bloquear:
+    espessura_sel = st.number_input("Espessura (cm):", value=espessura_inicial, disabled=True, help="Este componente possui espessura padronizada por norma ou mercado.")
+else:
+    espessura_sel = st.number_input("Espessura (cm):", min_value=0.1, max_value=100.0, value=espessura_inicial, step=0.5, help="Você pode ajustar a espessura deste elemento moldado in loco.")
 
-# 5. Inserção segura na lista de camadas do Session State
 if st.button("Adicionar Camada"):
     if material_sel:
         st.session_state.camadas.append({"material": material_sel, "espessura": espessura_sel})
         st.rerun()
     else:
         st.error("Por favor, selecione um material válido.")
+
 
 
 # Sessão 8: Lista de Camadas Inseridas, Cálculos da NBR 15220-2 e Créditos
