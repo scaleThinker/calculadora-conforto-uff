@@ -1,5 +1,4 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 
 # 1. Configuracao da pagina para o ambiente mobile sem elementos visuais extras
 st.set_page_config(page_title="Calculadora Conforto 1 UFF", layout="centered")
@@ -67,7 +66,7 @@ st.write("---")
 
 # 5. Secao de Criacao de Material Customizado simplificada com propriedades físicas explícias
 with st.expander("Criar Material Customizado para esta Sessão"):
-    st.write("Insira o nome e a condutividade térmica do material. Os dados de densidade de massa e calor específico são opcionais.")
+    st.write("Insira o nome e a condutividade térmica do material. Os dados de densidade de massa e calor específico são dicionais.")
     c_nome = st.text_input("Nome do Material Customizado:", placeholder="Ex: Tijolo Ecológico")
     
     col_c1, col_c2, col_c3 = st.columns(3)
@@ -91,106 +90,93 @@ with st.expander("Criar Material Customizado para esta Sessão"):
         else:
             st.error("Por favor, digite um nome para o material customizado.")
 
-# 6. Divisao da tela principal em duas colunas para mostrar os comandos e o desenho lado a lado
-col_esquerda, col_direita = st.columns([1.2, 1.0])
+# 6. Secao principal de entrada de dados unificada
+st.markdown("### Composição do Elemento")
 
-with col_esquerda:
-    st.markdown("### Composição do Elemento")
-    
-    # Separando os materiais em subcategorias com ordem alfabetica dentro de cada uma
-    categorias_ordem = [
-        "Alvenarias e Blocos de Vedação", 
-        "Concretos", 
-        "Revestimentos e Argamassas", 
-        "Coberturas e Forros", 
-        "Isolantes Térmicos", 
-        "Outros Materiais",
-        "Customizados"
-    ]
-    
-    # Criacao da lista final com a marcacao visual de categoria para facilitar a leitura do aluno
-    opcoes_formatadas = []
-    mapa_nomes_reais = {}
-    
-    for cat in categorias_ordem:
-        materiais_da_cat = sorted([nome for nome, dados in todos_materiais.items() if dados["cat"] == cat])
-        if materiais_da_cat:
-            opcoes_formatadas.append(f"--- {cat.upper()} ---")
-            for mat in materiais_da_cat:
-                nome_exibicao = f"   {mat}"
-                opcoes_formatadas.append(nome_exibicao)
-                mapa_nomes_reais[nome_exibicao] = mat
-                
-    opcoes_formatadas.append("--- OUTROS ---")
-    opcoes_formatadas.append("   Câmara de Ar Não Ventilada")
-    mapa_nomes_reais["   Câmara de Ar Não Ventilada"] = "Câmara de Ar Não Ventilada"
+# Separando os materiais em subcategorias com ordem alfabetica dentro de cada uma
+categorias_ordem = [
+    "Alvenarias e Blocos de Vedação", 
+    "Concretos", 
+    "Revestimentos e Argamassas", 
+    "Coberturas e Forros", 
+    "Isolantes Térmicos", 
+    "Outros Materiais",
+    "Customizados"
+]
 
-    col_l1, col_l2 = st.columns(2)
-    with col_l1:
-        material_sel_formatado = st.selectbox("Selecione o Material:", opcoes_formatadas)
-        item_valido = "---" not in material_sel_formatado
-        material_sel = mapa_nomes_reais.get(material_sel_formatado, None) if item_valido else None
-    with col_l2:
-        espessura_sel = st.number_input("Espessura (cm):", min_value=0.1, max_value=100.0, value=2.5, step=0.5)
+opcoes_formatadas = []
+mapa_nomes_reais = {}
 
-    if st.button("Adicionar Camada"):
-        if item_valido and material_sel:
-            st.session_state.camadas.append({"material": material_sel, "espessura": espessura_sel})
+for cat in categorias_ordem:
+    materiais_da_cat = sorted([nome for nome, dados in todos_materiais.items() if dados["cat"] == cat])
+    if materiais_da_cat:
+        opcoes_formatadas.append(f"--- {cat.upper()} ---")
+        for mat in materiais_da_cat:
+            nome_exibicao = f"   {mat}"
+            opcoes_formatadas.append(nome_exibicao)
+            mapa_nomes_reais[nome_exibicao] = mat
+            
+opcoes_formatadas.append("--- OUTROS ---")
+opcoes_formatadas.append("   Câmara de Ar Não Ventilada")
+mapa_nomes_reais["   Câmara de Ar Não Ventilada"] = "Câmara de Ar Não Ventilada"
+
+col_l1, col_l2 = st.columns(2)
+with col_l1:
+    material_sel_formatado = st.selectbox("Selecione o Material:", opcoes_formatadas)
+    item_valido = "---" not in material_sel_formatado
+    material_sel = mapa_nomes_reais.get(material_sel_formatado, None) if item_valido else None
+with col_l2:
+    espessura_sel = st.number_input("Espessura (cm):", min_value=0.1, max_value=100.0, value=2.5, step=0.5)
+
+if st.button("Adicionar Camada"):
+    if item_valido and material_sel:
+        st.session_state.camadas.append({"material": material_sel, "espessura": espessura_sel})
+    else:
+        st.error("Por favor, selecione um material válido dentro das categorias.")
+
+# 7. Processamento das Camadas e lista simples de exclusao
+R_camadas = 0.0
+C_total = 0.0
+
+if st.session_state.camadas:
+    st.write("---")
+    st.write("#### Camadas Atuais (De fora para dentro):")
+    
+    # Criamos um seletor simples de exclusao para evitar quebra de layout mobile
+    lista_exclusao = []
+    
+    for idx, cam in enumerate(st.session_state.camadas):
+        esp_m = cam["espessura"] / 100.0
+        
+        if cam["material"] == "Câmara de Ar Não Ventilada":
+            R_camada = 0.18
+            C_camada = 0.0
+            st.write(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm")
         else:
-            st.error("Por favor, selecione um material válido dentro das categorias.")
+            props = todos_materiais[cam["material"]]
+            R_camada = esp_m / props["lambda"]
+            C_camada = esp_m * props["densidade"] * props["calor_espe"]
+            st.write(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm (λ: {props['lambda']})")
+            
+        R_camadas += R_camada
+        C_total += C_camada
+        lista_exclusao.append(f"Camada {idx+1}: {cam['material']} ({cam['espessura']} cm)")
 
-     # 7. Listagem e Processamento Dinamico das Camadas com Edicao Independente
-    R_camadas = 0.0
-    C_total = 0.0
-
-    if st.session_state.camadas:
-        st.write("#### Camadas Atuais (De fora para dentro):")
-        
-        # Criamos uma copia da lista para evitar erros de mudanca de tamanho durante o loop
-        camadas_atuais = list(st.session_state.camadas)
-        
-        for idx, cam in enumerate(camadas_atuais):
-            esp_m = cam["espessura"] / 100.0  # Conversao de cm para metros
-            
-            if cam["material"] == "Câmara de Ar Não Ventilada":
-                R_camada = 0.18
-                C_camada = 0.0
-                texto_exibicao = f"C{idx+1}: {cam['material']} | {cam['espessura']} cm"
-            else:
-                props = todos_materiais[cam["material"]]
-                R_camada = esp_m / props["lambda"]
-                C_camada = esp_m * props["densidade"] * props["calor_espe"]
-                texto_exibicao = f"C{idx+1}: {cam['material']} | {cam['espessura']} cm (λ: {props['lambda']})"
-            
-            # Interface de controle individual por linha da camada
-            col_txt, col_subir, col_descer, col_excluir = st.columns([3.0, 0.5, 0.5, 0.5])
-            
-            with col_txt:
-                st.text(texto_exibicao)
-            with col_subir:
-                # Botao para subir a camada na estrutura (so aparece se nao for a primeira)
-                if st.button("▲", key=f"subir_{idx}") and idx > 0:
-                    st.session_state.camadas[idx], st.session_state.camadas[idx-1] = st.session_state.camadas[idx-1], st.session_state.camadas[idx]
-                    st.rerun()
-            with col_descer:
-                # Botao para descer a camada na estrutura (so aparece se nao for a ultima)
-                if st.button("▼", key=f"descer_{idx}") and idx < len(camadas_atuais) - 1:
-                    st.session_state.camadas[idx], st.session_state.camadas[idx+1] = st.session_state.camadas[idx+1], st.session_state.camadas[idx]
-                    st.rerun()
-            with col_excluir:
-                # Botao para deletar apenas esta camada especifica
-                if st.button("❌", key=f"deletar_{idx}"):
-                    st.session_state.camadas.pop(idx)
-                    st.rerun()
-            
-            R_camadas += R_camada
-            C_total += C_camada
-
-        st.write("")
-        if st.button("Limpar Todas as Camadas"):
+    st.write("")
+    
+    # Interface direta para remover uma camada sem quebrar colunas no celular
+    col_remover, col_limpar = st.columns(2)
+    with col_remover:
+        camada_para_remover = st.selectbox("Remover uma camada específica:", ["Selecione..."] + lista_exclusao)
+        if camada_para_remover != "Selecione...":
+            idx_remover = lista_exclusao.index(camada_para_remover)
+            st.session_state.camadas.pop(idx_remover)
+            st.rerun()
+    with col_limpar:
+        st.write("") # Espacamento visual
+        if st.button("Limpar Todas as Camadas", use_container_width=True):
             st.session_state.camadas = []
             st.rerun()
-
 
 # 8. Renderizacao dos Resultados Finais
 if R_camadas > 0:
