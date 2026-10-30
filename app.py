@@ -219,55 +219,89 @@ if st.session_state.camadas:
         st.markdown(html_diagrama, unsafe_allow_html=True)
         st.caption(f"Espessura total do elemento construtivo: {espessura_total:.1f} cm")
 
-# #SESSÃO 10: Verificação de Conformidade por Zona Bioclimática (ABNT NBR 15220-3)
+# #SESSÃO 10: Verificação de Conformidade de Desempenho (NBR 15575 / Zonas Bioclimáticas)
 if st.session_state.camadas:
     st.write("---")
-    st.markdown("### Verificação de Desempenho Normativo")
-    st.write("Selecione a zona bioclimática do projeto para validar os resultados obtidos frente aos limites da ABNT NBR 15220-3.")
     
-    # Lista de zonas baseada na norma
-    zona_sel = st.selectbox(
-        "Escolha a Zona Bioclimática (ZBB):",
-        [f"Zona {i}" for i in range(1, 9)],
-        help="Niterói e Rio de Janeiro localizam-se na Zona 8"
-    )
-    
-    is_parede = "Horizontal" in tipo_fluxo
-    mensagem_validacao = ""
-    sucesso = True
-    
-    # Definição das condições de contorno de limites da NBR 15220-3 para habitações
-    if is_parede:
-        # Limites para Paredes Externas (Zonas 1 a 8)
-        if zona_sel in ["Zona 1", "Zona 2", "Zona 3", "Zona 4", "Zona 5", "Zona 6", "Zona 7"]:
-            # Zonas 1 a 7 exigem paredes pesadas (U <= 2.2 e C >= 130)
-            limite_U = 2.2
+    # Atendendo ao pedido: tudo embutido dentro de uma caixa expansora para não poluir a tela mobile
+    with st.expander("Verificação de Desempenho Normativo (Clique para abrir)"):
+        st.write("Selecione os parâmetros da edificação para validar o componente frente aos limites de referência da NBR 15575.")
+        
+        col_z1, col_z2 = st.columns(2)
+        with col_z1:
+            # Lista com as novas divisões de Zonas Bioclimáticas consolidadas pela norma
+            zona_sel = st.selectbox(
+                "Zona Bioclimática:",
+                ["ZB 1-2", "ZB 3-4", "ZB 5-6", "ZB 7-8"]
+            )
+        with col_z2:
+            # Entrada da absortância (cor da fachada/cobertura) exigida para as condicionantes
+            absortancia = st.number_input(
+                "Absortância Solar da Superfície (α):", 
+                min_value=0.0, 
+                max_value=1.0, 
+                value=0.3, 
+                step=0.05,
+                help="Valores baixos (≤ 0.6) representam cores claras. Valores altos (> 0.6) indicam cores escuras."
+            )
+            
+        is_parede = "Horizontal" in tipo_fluxo
+        mensagem_validacao = ""
+        sucesso = True
+        
+        if is_parede:
+            st.markdown("**Referência: NBR 15575-4 — Paredes Externas**")
+            
+            # Verificação de Transmitância Térmica da Parede (Upar) de acordo com a tabela 13
+            if zona_sel == "ZB 1-2":
+                limite_U = 2.7
+            elif zona_sel in ["ZB 3-4", "ZB 5-6", "ZB 7-8"]:
+                if absortancia <= 0.6:
+                    limite_U = 3.7
+                else:
+                    limite_U = 2.5
+            
             if U_final > limite_U:
-                mensagem_validacao += f"❌ Transmitância Térmica Incorreta: Para a {zona_sel}, o limite máximo permitido para paredes é U ≤ {limite_U} W/(m²·K).\n\n"
+                mensagem_validacao += f"❌ Transmitância Térmica Incorreta: Para este cenário de zona e absortância, o limite máximo permitido é U ≤ {limite_U} W/(m²·K).\n\n"
                 sucesso = False
-            if C_total < 130.0:
-                mensagem_validacao += f"❌ Capacidade Térmica Insuficiente: Para a {zona_sel}, recomenda-se alta inércia térmica (C ≥ 130 kJ/(m²·K)).\n\n"
+                
+            # Verificação de Capacidade Térmica da Parede (CTpar) de acordo com a tabela 14
+            # Nota: Embora o slide cite de 1 a 4, no zoneamento revisado ZB 1-2 e ZB 3-4 herdam a obrigatoriedade da inércia
+            if zona_sel in ["ZB 1-2", "ZB 3-4"]:
+                if C_total < 130.0:
+                    mensagem_validacao += "❌ Capacidade Térmica Insuficiente: Para as Zonas de 1 a 4, a inércia térmica é obrigatória (C ≥ 130 kJ/(m²·K)).\n\n"
+                    sucesso = False
+            else:
+                st.caption("ℹ️ Para esta zona bioclimática não há requisitos mínimos de Capacidade Térmica (C) na parede.")
+                
+        else:
+            st.markdown("**Referência: NBR 15575-5 — Coberturas**")
+            st.caption("ℹ️ Não há exigências normativas regulamentares quanto à capacidade térmica (C) para coberturas.")
+            
+            # Verificação de Transmitância Térmica da Cobertura (Ucob) de acordo com a tabela 5
+            if zona_sel == "ZB 1-2":
+                limite_U = 2.3
+            elif zona_sel == "ZB 3-4":
+                if absortancia <= 0.6:
+                    limite_U = 2.3
+                else:
+                    limite_U = 1.5
+            elif zona_sel in ["ZB 5-6", "ZB 7-8"]:
+                if absortancia <= 0.4:
+                    limite_U = 2.3  # Nota técnica: ignora-se o fator FT por simplicidade didática em sala de aula
+                else:
+                    limite_U = 1.5
+                    
+            if U_final > limite_U:
+                mensagem_validacao += f"❌ Transmitância Térmica Incorreta: Para coberturas neste cenário de zona e absortância, o limite máximo permitido é U ≤ {limite_U} W/(m²·K).\n\n"
                 sucesso = False
-        elif zona_sel == "Zona 8":
-            # Zona 8 (Niterói/RJ): Recomenda parede leve refletora (U <= 0.6) OU pesada (U <= 2.2 e C >= 130)
-            if U_final > 2.2:
-                mensagem_validacao += "❌ Transmitância Térmica Incorreta: Na Zona 8, a transmitância máxima permitida para paredes é U ≤ 2.2 W/(m²·K).\n\n"
-                sucesso = False
-            elif U_final > 0.6 and C_total < 130.0:
-                mensagem_validacao += "❌ Inércia Térmica Inadequada: Na Zona 8, se a parede não for leve refletora (U ≤ 0.6), ela deve obrigatoriamente ser pesada com C ≥ 130 kJ/(m²·K).\n\n"
-                sucesso = False
-    else:
-        # Limites para Coberturas (Fluxo Descendente)
-        limite_U = 2.0
-        if U_final > limite_U:
-            mensagem_validacao += f"❌ Transmitância Térmica Incorreta: Para coberturas na {zona_sel}, o limite máximo permitido é U ≤ {limite_U} W/(m²·K).\n\n"
-            sucesso = False
+                
+        # Exibição sóbria do resultado final do diagnóstico
+        if sucesso:
+            st.success(f"✅ Componente Aprovado! Atende perfeitamente aos requisitos de desempenho térmico da NBR 15575 para a região selecionada.")
+        else:
+            st.error(mensagem_validacao)
 
-    # Exibição do diagnóstico de conformidade para o estudante
-    if sucesso:
-        st.success(f"✅ Componente Aprovado! Os valores calculados atendem plenamente às diretrizes construtivas da ABNT NBR 15220-3 para a {zona_sel}.")
-    else:
-        st.error(mensagem_validacao)
 
 # #SESSÃO 11: Memorial de Cálculo e Formulação Normativa (NBR 15220-2)
 with st.expander("Para saber mais:"):
