@@ -178,6 +178,39 @@ if st.session_state.camadas:
     if st.button("Limpar Todas as Camadas"):
         st.session_state.camadas = []
         st.rerun()
+# #SESSÃO 9: Memorial de Cálculo e Formulação Normativa (NBR 15220-2)
+with st.expander("Conferência Manual: Como calcular passo a passo"):
+    st.markdown("""
+    Para conferir os resultados na ponta do lápis seguindo a **ABNT NBR 15220-2**, siga as etapas abaixo:
+
+    ### 1. Transmitância Térmica ($U$)
+    A Transmitância Térmica é o inverso da Resistência Térmica Total ($R_T$):
+    $$U = \\frac{1}{R_T}$$
+
+    Onde a Resistência Total ($R_T$) é o somatório das resistências superficiais externa ($R_{se}$) e interna ($R_{si}$) com a resistência de cada camada ($R_n$):
+    $$R_T = R_{se} + R_{si} + R_1 + R_2 + ... + R_n$$
+
+    **Como calcular a resistência de cada camada ($R_n$):**
+    Converta a espessura ($e$) de centímetros para metros e divida pela Condutividade Térmica ($\lambda$) do material:
+    $$R = \\frac{e (\\text{em metros})}{\\lambda}$$
+    *Nota: Para a Câmara de Ar Não Ventilada, adota-se o valor de $R$ direto da tabela da norma ($0,16$ para paredes ou $0,15$ para coberturas).*
+
+    **Resistências Superficiais Fixas ($R_{se} + R_{si}$):**
+    *   **Fluxo Horizontal (Paredes):** $0,04 + 0,13 = 0,17 \\text{ m}^2\\cdot\\text{K/W}$
+    *   **Fluxo Descendente (Coberturas):** $0,04 + 0,17 = 0,21 \\text{ m}^2\\cdot\\text{K/W}$
+
+    ---
+
+    ### 2. Capacidade Térmica ($C$)
+    A Capacidade Térmica Total do elemento é o somatório da capacidade térmica de cada uma das camadas:
+    $$C_{\\text{total}} = C_1 + C_2 + ... + C_n$$
+
+    **Como calcular a capacidade de cada camada ($C_n$):**
+    Multiplique a espessura ($e$) em metros, pela Densidade de Massa ($\\rho$) e pelo Calor Específico ($c$):
+    $$C = e (\\text{em metros}) \\times \\rho \\times c$$
+    *Nota: A Câmara de Ar Não Ventilada não possui capacidade térmica ($C = 0$).*
+    """)
+
 
 st.write("---")
 st.caption("Desenvolvido para fins didáticos — Disciplina de Conforto Ambiental I (EAU UFF)")
