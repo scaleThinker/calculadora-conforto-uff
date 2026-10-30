@@ -64,27 +64,36 @@ else:
 
 st.write("---")
 
-# 5. Secao de Criacao de Material Customizado
+# 5. Secao de Criacao de Material Customizado simplificada
 with st.expander("Criar Material Customizado para esta Sessão"):
-    st.write("Insira as propriedades de um material específico não listado no banco de dados.")
+    st.write("Insira o nome e a condutividade do material. Os dados de densidade e calor específico são opcionais.")
     c_nome = st.text_input("Nome do Material Customizado:", placeholder="Ex: Tijolo Ecológico")
+    
     col_c1, col_c2, col_c3 = st.columns(3)
     with col_c1:
         c_lambda = st.number_input("Condutividade (lambda) [W/m·K]:", min_value=0.01, max_value=400.0, value=1.00, step=0.05)
     with col_c2:
-        c_densidade = st.number_input("Densidade (rho) [kg/m³]:", min_value=10, max_value=10000, value=1500, step=50)
+        c_densidade = st.number_input("Densidade (rho) [kg/m³] (Opcional):", min_value=0, max_value=10000, value=0, step=50, help="Deixe zero para adotar o padrão de alvenarias")
     with col_c3:
-        c_calor = st.number_input("Calor Específico (c) [kJ/kg·K]:", min_value=0.1, max_value=5.0, value=1.0, step=0.1)
+        c_calor = st.number_input("Calor Específico (c) [kJ/kg·K] (Opcional):", min_value=0.0, max_value=5.0, value=0.0, step=0.1, help="Deixe zero para adotar o padrão de alvenarias")
         
     if st.button("Salvar Material na Lista"):
         if c_nome:
-            st.session_state.materiais_custom[c_nome] = {
-                "lambda": c_lambda, "densidade": c_densidade, "calor_espe": c_calor, "cat": "Customizados"
+            # Caso o aluno nao saiba os dados de inercia, o sistema adota valores medios de alvenaria para nao travar o calculo de C
+            densidade_final = c_densidade if c_densidade > 0 else 1200
+            calor_final = c_calor if c_calor > 0.0 else 0.92
+            
+            st.session_state.materials_custom[c_nome] = {
+                "lambda": c_lambda, 
+                "densidade": densidade_final, 
+                "calor_espe": calor_final, 
+                "cat": "Customizados"
             }
             st.success(f"Material '{c_nome}' adicionado com sucesso!")
             st.rerun()
         else:
             st.error("Por favor, digite um nome para o material customizado.")
+
 
 # 6. Secao de Adicao de Camadas a Composicao com correcao do argumento das colunas
 st.markdown("### Composição do Elemento")
