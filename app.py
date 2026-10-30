@@ -1,4 +1,5 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 
 # 1. Configuracao da pagina para o ambiente mobile sem elementos visuais extras
 st.set_page_config(page_title="Calculadora Conforto 1 UFF", layout="centered")
@@ -7,39 +8,39 @@ st.title("Conforto 1 — EAU UFF")
 st.subheader("Calculadora de Propriedades Térmicas")
 st.write("Insira as camadas de fora para dentro para calcular a Transmitância (U) e a Capacidade Térmica (C).")
 
-# 2. Banco de dados expandido com os 20 materiais da NBR 15220-2
+# 2. Banco de dados expandido com os 20 materiais da NBR 15220-2 organizados por categorias corretas
 materiais_padrao = {
-    # Alvenarias e Blocos
-    "Bloco cerâmico com furos horizontais (Tijolo baiano)": {"lambda": 0.70, "densidade": 1200, "calor_espe": 0.92, "cat": "Alvenarias"},
-    "Bloco cerâmico com furos verticais (Estrutural)": {"lambda": 1.05, "densidade": 1600, "calor_espe": 0.92, "cat": "Alvenarias"},
-    "Bloco de concreto (Vedação comum)": {"lambda": 1.40, "densidade": 1400, "calor_espe": 1.00, "cat": "Alvenarias"},
-    "Bloco de concreto celular autoclavado": {"lambda": 0.18, "densidade": 500, "calor_espe": 1.00, "cat": "Alvenarias"},
-    "Tijolo cerâmico maciço comum": {"lambda": 0.85, "densidade": 1600, "calor_espe": 0.92, "cat": "Alvenarias"},
+    # Alvenarias e Blocos de Vedacao
+    "Bloco cerâmico com furos horizontais (Tijolo baiano)": {"lambda": 0.70, "densidade": 1200, "calor_espe": 0.92, "cat": "Alvenarias e Blocos de Vedação"},
+    "Bloco cerâmico com furos verticais (Estrutural)": {"lambda": 1.05, "densidade": 1600, "calor_espe": 0.92, "cat": "Alvenarias e Blocos de Vedação"},
+    "Bloco de concreto (Vedação comum)": {"lambda": 1.40, "densidade": 1400, "calor_espe": 1.00, "cat": "Alvenarias e Blocos de Vedação"},
+    "Bloco de concreto celular autoclavado": {"lambda": 0.18, "densidade": 500, "calor_espe": 1.00, "cat": "Alvenarias e Blocos de Vedação"},
+    "Tijolo cerâmico maciço comum": {"lambda": 0.85, "densidade": 1600, "calor_espe": 0.92, "cat": "Alvenarias e Blocos de Vedação"},
     
     # Concretos
     "Concreto armado": {"lambda": 1.75, "densidade": 2500, "calor_espe": 1.00, "cat": "Concretos"},
     "Concreto simples (sem armadura)": {"lambda": 1.40, "densidade": 2200, "calor_espe": 1.00, "cat": "Concretos"},
     
     # Revestimentos e Argamassas
-    "Argamassa de cimento e areia (Reboco tradicional)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "cat": "Revestimentos"},
-    "Argamassa de cal e areia": {"lambda": 0.85, "densidade": 1700, "calor_espe": 1.00, "cat": "Revestimentos"},
-    "Gesso liso para revestimento": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "cat": "Revestimentos"},
-    "Placa de gesso acartonado (Drywall)": {"lambda": 0.21, "densidade": 800, "calor_espe": 1.00, "cat": "Revestimentos"},
+    "Argamassa de cimento e areia (Reboco tradicional)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "cat": "Revestimentos e Argamassas"},
+    "Argamassa de cal e areia": {"lambda": 0.85, "densidade": 1700, "calor_espe": 1.00, "cat": "Revestimentos e Argamassas"},
+    "Gesso liso para revestimento": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "cat": "Revestimentos e Argamassas"},
+    "Placa de gesso acartonado (Drywall)": {"lambda": 0.21, "densidade": 800, "calor_espe": 1.00, "cat": "Revestimentos e Argamassas"},
     
     # Coberturas e Forros
-    "Telha cerâmica": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "cat": "Coberturas"},
-    "Telha de fibrocimento": {"lambda": 0.65, "densidade": 1900, "calor_espe": 0.84, "cat": "Coberturas"},
-    "Telha metálica simples": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "cat": "Coberturas"},
-    "Forro ou tábua de madeira (Pinus/Eucalipto)": {"lambda": 0.13, "densidade": 600, "calor_espe": 1.34, "cat": "Coberturas"},
+    "Telha cerâmica": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "cat": "Coberturas e Forros"},
+    "Telha de fibrocimento": {"lambda": 0.65, "densidade": 1900, "calor_espe": 0.84, "cat": "Coberturas e Forros"},
+    "Telha metálica simples": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "cat": "Coberturas e Forros"},
+    "Forro ou tábua de madeira (Pinus/Eucalipto)": {"lambda": 0.13, "densidade": 600, "calor_espe": 1.34, "cat": "Coberturas e Forros"},
     
-    # Isolantes Térmicos
-    "Lã de vidro / Lã mineral": {"lambda": 0.04, "densidade": 40, "calor_espe": 0.80, "cat": "Isolantes"},
-    "Poliuretano expandido (PU)": {"lambda": 0.03, "densidade": 35, "calor_espe": 1.40, "cat": "Isolantes"},
-    "Poliestireno expandido (EPS / Isopor)": {"lambda": 0.04, "densidade": 20, "calor_espe": 1.45, "cat": "Isolantes"},
+    # Isolantes Termicos
+    "Lã de vidro / Lã mineral": {"lambda": 0.04, "densidade": 40, "calor_espe": 0.80, "cat": "Isolantes Térmicos"},
+    "Poliuretano expandido (PU)": {"lambda": 0.03, "densidade": 35, "calor_espe": 1.40, "cat": "Isolantes Térmicos"},
+    "Poliestireno expandido (EPS / Isopor)": {"lambda": 0.04, "densidade": 20, "calor_espe": 1.45, "cat": "Isolantes Térmicos"},
     
     # Outros Materiais
-    "Vidro comum": {"lambda": 1.00, "densidade": 2500, "calor_espe": 0.80, "cat": "Outros"},
-    "Solo compactado (Taipa/Adobe)": {"lambda": 1.00, "densidade": 1800, "calor_espe": 1.00, "cat": "Outros"},
+    "Vidro comum": {"lambda": 1.00, "densidade": 2500, "calor_espe": 0.80, "cat": "Outros Materiais"},
+    "Solo compactado (Taipa/Adobe)": {"lambda": 1.00, "densidade": 1800, "calor_espe": 1.00, "cat": "Outros Materiais"},
 }
 
 # 3. Gerenciamento do estado da sessao para persistencia das camadas e customizacoes
@@ -64,7 +65,7 @@ else:
 
 st.write("---")
 
-# 5. Secao de Criacao de Material Customizado simplificada com propriedades físicas explicitas
+# 5. Secao de Criacao de Material Customizado simplificada com propriedades físicas explícias
 with st.expander("Criar Material Customizado para esta Sessão"):
     st.write("Insira o nome e a condutividade térmica do material. Os dados de densidade de massa e calor específico são opcionais.")
     c_nome = st.text_input("Nome do Material Customizado:", placeholder="Ex: Tijolo Ecológico")
@@ -79,59 +80,118 @@ with st.expander("Criar Material Customizado para esta Sessão"):
         
     if st.button("Salvar Material na Lista"):
         if c_nome:
-            # Caso o aluno nao saiba os dados de inercia, o sistema adota valores medios de alvenaria para nao travar o calculo de C
             densidade_final = c_densidade if c_densidade > 0 else 1200
             calor_final = c_calor if c_calor > 0.0 else 0.92
             
             st.session_state.materiais_custom[c_nome] = {
-                "lambda": c_lambda, 
-                "densidade": densidade_final, 
-                "calor_espe": calor_final, 
-                "cat": "Customizados"
+                "lambda": c_lambda, "densidade": densidade_final, "calor_espe": calor_final, "cat": "Customizados"
             }
             st.success(f"Material '{c_nome}' adicionado com sucesso!")
             st.rerun()
         else:
             st.error("Por favor, digite um nome para o material customizado.")
 
+# 6. Divisao da tela principal em duas colunas para mostrar os comandos e o desenho lado a lado
+col_esquerda, col_direita = st.columns([1.2, 1.0])
 
-# 6. Secao de Adicao de Camadas a Composicao com correcao do argumento das colunas
-st.markdown("### Composição do Elemento")
-col_l1, col_l2 = st.columns(2)
-with col_l1:
-    opcoes_selecao = list(todos_materiais.keys()) + ["Câmara de Ar Não Ventilada"]
-    material_sel = st.selectbox("Selecione o Material:", opcoes_selecao)
-with col_l2:
-    espessura_sel = st.number_input("Espessura (cm):", min_value=0.1, max_value=100.0, value=2.5, step=0.5)
+with col_esquerda:
+    st.markdown("### Composição do Elemento")
+    
+    # Separando os materiais em subcategorias com ordem alfabetica dentro de cada uma
+    categorias_ordem = [
+        "Alvenarias e Blocos de Vedação", 
+        "Concretos", 
+        "Revestimentos e Argamassas", 
+        "Coberturas e Forros", 
+        "Isolantes Térmicos", 
+        "Outros Materiais",
+        "Customizados"
+    ]
+    
+    # Criacao da lista final com a marcacao visual de categoria para facilitar a leitura do aluno
+    opcoes_formatadas = []
+    mapa_nomes_reais = {}
+    
+    for cat in categorias_ordem:
+        materiais_da_cat = sorted([nome for nome, dados in todos_materiais.items() if dados["cat"] == cat])
+        if materiais_da_cat:
+            opcoes_formatadas.append(f"--- {cat.upper()} ---")
+            for mat in materiais_da_cat:
+                nome_exibicao = f"   {mat}"
+                opcoes_formatadas.append(nome_exibicao)
+                mapa_nomes_reais[nome_exibicao] = mat
+                
+    opcoes_formatadas.append("--- OUTROS ---")
+    opcoes_formatadas.append("   Câmara de Ar Não Ventilada")
+    mapa_nomes_reais["   Câmara de Ar Não Ventilada"] = "Câmara de Ar Não Ventilada"
 
-if st.button("Adicionar Camada"):
-    st.session_state.camadas.append({"material": material_sel, "espessura": espessura_sel})
+    col_l1, col_l2 = st.columns(2)
+    with col_l1:
+        material_sel_formatado = st.selectbox("Selecione o Material:", opcoes_formatadas)
+        item_valido = "---" not in material_sel_formatado
+        material_sel = mapa_nomes_reais.get(material_sel_formatado, None) if item_valido else None
+    with col_l2:
+        espessura_sel = st.number_input("Espessura (cm):", min_value=0.1, max_value=100.0, value=2.5, step=0.5)
 
-# 7. Listagem e Processamento Dinamico das Camadas
-R_camadas = 0.0
-C_total = 0.0
-
-if st.session_state.camadas:
-    st.write("#### Camadas Atuais (De fora para dentro):")
-    for idx, cam in enumerate(st.session_state.camadas):
-        esp_m = cam["espessura"] / 100.0  # Conversao de cm para metros
-        
-        if cam["material"] == "Câmara de Ar Não Ventilada":
-            R_camada = 0.18  # Resistencia de camara de ar fixa conforme NBR 15220-2
-            C_camada = 0.0
-            st.text(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm")
+    if st.button("Adicionar Camada"):
+        if item_valido and material_sel:
+            st.session_state.camadas.append({"material": material_sel, "espessura": espessura_sel})
         else:
-            props = todos_materiais[cam["material"]]
-            R_camada = esp_m / props["lambda"]
-            C_camada = esp_m * props["densidade"] * props["calor_espe"]
-            st.text(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm (λ: {props['lambda']})")
-            
-        R_camadas += R_camada
-        C_total += C_camada
+            st.error("Por favor, selecione um material válido dentro das categorias.")
 
-    if st.button("Limpar Todas as Camadas"):
-        st.session_state.camadas = []
-        st.rerun()
+    # 7. Listagem e Processamento Dinamico das Camadas
+    R_camadas = 0.0
+    C_total = 0.0
+
+    if st.session_state.camadas:
+        st.write("#### Camadas Atuais (De fora para dentro):")
+        for idx, cam in enumerate(st.session_state.camadas):
+            esp_m = cam["espessura"] / 100.0
+            
+            if cam["material"] == "Câmara de Ar Não Ventilada":
+                R_camada = 0.18
+                C_camada = 0.0
+                st.text(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm")
+            else:
+                props = todos_materiais[cam["material"]]
+                R_camada = esp_m / props["lambda"]
+                C_camada = esp_m * props["densidade"] * props["calor_espe"]
+                st.text(f"Camada {idx+1}: {cam['material']} | {cam['espessura']} cm (λ: {props['lambda']})")
+                
+            R_camadas += R_camada
+            C_total += C_camada
+
+        if st.button("Limpar Todas as Camadas"):
+            st.session_state.camadas = []
+            st.rerun()
+
+with col_direita:
+    st.markdown("### Esquema Gráfico")
+    if st.session_state.camadas:
+        fig, ax = plt.subplots(figsize=(5, 3))
+        acumulado = 0.0
+        
+        for idx, cam in enumerate(st.session_state.camadas):
+            label_curto = cam["material"][:20] + "..." if len(cam["material"]) > 20 else cam["material"]
+            ax.barh(0, cam["espessura"], left=acumulado, height=0.6, edgecolor='black', 
+                    label=f"C{idx+1}: {label_curto} ({cam['espessura']} cm)")
+            acumulado += cam["espessura"]
+            
+        ax.set_yticks([])
+        ax.set_ylim(-0.5, 0.5)
+        ax.set_xlabel("Espessura Total (cm)")
+        
+        ax.text(-0.02, 0.4, "EXTERNO", transform=ax.get_yaxis_transform(), ha='right', va='center', fontweight='bold', fontsize=9, color='blue')
+        ax.text(acumulado + 0.02, 0.4, "INTERNO", transform=ax.get_yaxis_transform(), ha='left', va='center', fontweight='bold', fontsize=9, color='red')
+        
+        ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3), ncol=1, frameon=True, fontsize=8)
+        
+        for spine in ["top", "left", "right"]:
+            ax.spines[spine].set_visible(False)
+            
+        st.pyplot(fig)
+    else:
+        st.info("Adicione camadas para visualizar o desenho da seção transversal aqui.")
 
 # 8. Renderizacao dos Resultados Finais
 if R_camadas > 0:
