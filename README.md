@@ -1,4 +1,4 @@
-# 🏢 Calculadora de Propriedades Térmicas — Conforto 1 EAU UFF
+# Calculadora de Propriedades Térmicas — Conforto 1 EAU UFF
 
 Esta é uma ferramenta web interativa e de código aberto desenvolvida especificamente como suporte didático para os estudantes de Arquitetura e Urbanismo da **Escola de Arquitetura e Urbanismo da Universidade Federal Fluminense (EAU UFF)**, no escopo da disciplina de **Conforto Ambiental I**.
 
@@ -6,7 +6,7 @@ O aplicativo substitui ferramentas analíticas antigas, permitindo que os alunos
 
 ---
 
-📜 Autoria e Créditos
+ Autoria e Créditos
 
 Este aplicativo foi idealizado e desenvolvido como parte das atividades de estágio docência na disciplina de Conforto Ambiental I:
 • Desenvolvedor e Autor: Brendo Tavares dos Santos (Estagiário Docente / Mestrando PPGAU UFF)
@@ -16,7 +16,7 @@ Os dados térmicos de referência e parâmetros de cálculo seguem rigorosamente
 
 ---
 
-## 📊 Parâmetros Calculados
+## Parâmetros Calculados
 
 A calculadora processa em tempo real os critérios exigidos pelas normas técnicas brasileiras (**ABNT NBR 15220-2** e **ABNT NBR 15575**):
 
@@ -26,7 +26,7 @@ A calculadora processa em tempo real os critérios exigidos pelas normas técnic
 
 ---
 
-## 🧱 Componentes e Materiais Disponíveis
+##  Componentes e Materiais Disponíveis
 
 O banco de dados nativo do aplicativo é fundamentado nas propriedades físicas estritas da **NBR 15220-2**, abrangendo sistemas comuns na construção civil brasileira e na autoconstrução em cenários de interesse social:
 * Argamassa tradicional de cimento e areia (Reboco)
@@ -40,7 +40,7 @@ O banco de dados nativo do aplicativo é fundamentado nas propriedades físicas 
 
 ---
 
-## 📱 Como Utilizar em Sala de Aula
+##  Como Utilizar em Sala de Aula
 
 O aplicativo foi projetado com foco em dispositivos móveis para facilitar o uso prático durante os exercícios de atelier e análises de casos reais.
 
@@ -70,7 +70,7 @@ Caso queira rodar o servidor localmente na sua máquina, siga os passos abaixo n
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 * **Python** (Linguagem de programação principal)
 * **Streamlit** (Framework de interface gráfica e ambiente web reativo)
@@ -78,7 +78,7 @@ Caso queira rodar o servidor localmente na sua máquina, siga os passos abaixo n
 
 ---
 
-## 📜 Licença e Créditos
+##  Licença e Créditos
 
 Desenvolvido para fins exclusivamente educacionais na Escola de Arquitetura e Urbanismo — UFF. 
 Os dados térmicos de referência seguem as tabelas oficiais vigentes da Associação Brasileira de Normas Técnicas (ABNT).
