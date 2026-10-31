@@ -148,7 +148,7 @@ if st.button("Adicionar Camada"):
     else:
         st.error("Por favor, selecione um material válido.")
 
-# Sessão 8: Lista de Camadas Inseridas, Cálculos da NBR 15220-2 e Créditos
+# #SESSÃO 8
 R_camadas = 0.0
 C_total = 0.0
 
@@ -162,19 +162,33 @@ if st.session_state.camadas:
             dados = todos_materiais[nome_m]
             e = camada["espessura"] / 100.0
             
-            if nome_m == "Câmara de Air Não Ventilada":
-                r_camada = 0.16 if "Horizontal" in tipo_fluxo else 0.15
+            # Correção definitiva: Desvia pelo lambda ser nulo, independente do nome do material
+            if dados["lambda"] is None:
+                is_parede = "Horizontal" in tipo_fluxo
                 c_camada = 0.0
-                especificacao_fisica = f"R = {r_camada:.2f} m²·K/W"
+                
+                if "5 mm" in nome_m: r_camada = 0.10
+                elif "7 mm" in nome_m: r_camada = 0.12
+                elif "10 mm" in nome_m: r_camada = 0.14
+                elif "15 mm" in nome_m: r_camada = 0.15
+                elif "20 mm" in nome_m: r_camada = 0.16 if is_parede else 0.15
+                elif "25 mm" in nome_m: r_camada = 0.17 if is_parede else 0.16
+                elif "50 mm" in nome_m: r_camada = 0.19 if is_parede else 0.16
+                elif "100 mm" in nome_m: r_camada = 0.20 if is_parede else 0.16
+                elif "200 mm" in nome_m: r_camada = 0.21 if is_parede else 0.16
+                elif "300 mm" in nome_m: r_camada = 0.21 if is_parede else 0.16
+                else: r_camada = 0.21 if is_parede else 0.16
+                
+                especificacao_fisica = f"R Fixo NBR = {r_camada:.2f} m²·K/W | ρ = 0 kg/m³ | c = 0.00 kJ/(kg·K)"
             else:
                 r_camada = e / dados["lambda"]
                 c_camada = (e * dados["densidade"] * dados["calor_espe"])
-                especificacao_fisica = f"λ = {dados['lambda']:.2f} W/m·K | ρ = {dados['densidade']} kg/m³ | c = {dados['calor_espe']:.2f} kJ/kg·K"
+                especificacao_fisica = f"λ = {dados['lambda']:.2f} W/(m·K) | ρ = {dados['densidade']} kg/m³ | c = {dados['calor_espe']:.2f} kJ/(kg·K)"
             
             R_camadas += r_camada
             C_total += c_camada
             
-            col_ver, col_del = st.columns([4, 1])
+            col_ver, col_del = st.columns()
             with col_ver:
                 st.write(f"**Camada {idx+1}: {nome_m}** — {camada['espessura']} cm")
                 st.caption(especificacao_fisica)
@@ -191,10 +205,6 @@ if st.session_state.camadas:
     st.metric(label="Transmitância Térmica (U)", value=f"{U_final:.2f} W/(m²·K)")
     st.metric(label="Capacidade Térmica (C)", value=f"{C_total:.2f} kJ/(m²·K)")
 
-if st.session_state.camadas:
-    if st.button("Limpar Todas as Camadas"):
-        st.session_state.camadas = []
-        st.rerun()
 
 # #SESSÃO 9: Diagrama Esquemático Espacial Dinâmico (Mobile-First Corrigido)
 if st.session_state.camadas:
