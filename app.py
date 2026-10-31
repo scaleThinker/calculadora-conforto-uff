@@ -185,7 +185,7 @@ if st.session_state.camadas:
             R_camadas += r_camada
             C_total += c_camada
             
-            col_ver, col_del = st.columns()
+            col_ver, col_del = st.columns(2)
             with col_ver:
                 st.write(f"**Camada {idx+1}: {nome_m}** — {camada['espessura']} cm")
                 st.caption(especificacao_fisica)
