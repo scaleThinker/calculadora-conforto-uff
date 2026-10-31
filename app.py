@@ -32,7 +32,7 @@ materiais_padrao = {
     "Placa de gesso acartonado (Drywall)": {"lambda": 0.21, "densidade": 800, "calor_espe": 1.00, "esp_padrao": 1.25, "bloqueado": True, "cat": "Revestimentos e Argamassas"},
     
     "Camada de impermeabilização (Asfalto)": {"lambda": 0.22, "densidade": 1100, "calor_espe": 1.00, "esp_padrao": 0.4, "bloqueado": True, "cat": "Coberturas e Forros"},
-    "Forro de gesso (Placa plaqueada)": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "esp_padrao": 1.2, "bloqueado": True, "cat": "Coberturas e Forros"},
+    "Forro de gesso (Placa plaqueada)": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "esp_padrao": 1.2, "bloqueado": False, "cat": "Coberturas e Forros"},
     "Forro ou tábua de madeira": {"lambda": 0.13, "densidade": 600, "calor_espe": 1.34, "esp_padrao": 1.0, "bloqueado": False, "cat": "Coberturas e Forros"},
     "Telha cerâmica": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 1.0, "bloqueado": True, "cat": "Coberturas e Forros"},
     "Telha de fibrocimento": {"lambda": 0.65, "densidade": 1900, "calor_espe": 0.84, "esp_padrao": 0.8, "bloqueado": True, "cat": "Coberturas e Forros"},
