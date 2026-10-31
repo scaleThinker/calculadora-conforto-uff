@@ -27,7 +27,7 @@ materiais_padrao = {
     "Contrapiso (Argamassa de cimento)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "esp_padrao": 3.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Gesso liso para revestimento": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "esp_padrao": 1.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Pedra natural para revestimento": {"lambda": 2.40, "densidade": 2600, "calor_espe": 1.00, "esp_padrao": 3.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
-    "Piso cerâmico / Azulejo": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 1.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
+    "Piso cerâmico / Azulejo": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 0.75, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Placa de gesso acartonado (Drywall)": {"lambda": 0.21, "densidade": 800, "calor_espe": 1.00, "esp_padrao": 1.25, "bloqueado": True, "cat": "Revestimentos e Argamassas"},
     
     "Camada de impermeabilização (Asfalto)": {"lambda": 0.22, "densidade": 1100, "calor_espe": 1.00, "esp_padrao": 0.4, "bloqueado": True, "cat": "Coberturas e Forros"},
