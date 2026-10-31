@@ -176,7 +176,7 @@ if st.session_state.camadas:
                 elif "300 mm" in nome_m: r_camada = 0.21 if is_parede else 0.16
                 else: r_camada = 0.21 if is_parede else 0.16
                 
-                especificacao_fisica = f"R Fixo NBR = {r_camada:.2f} m²·K/W | ρ = 0 kg/m³ | c = 0.00 kJ/(kg·K)"
+                especificacao_fisica = f"Resistência Térmica = {r_camada:.2f} m²·K/W | ρ = 0 kg/m³ | c = 0.00 kJ/(kg·K)"
             else:
                 r_camada = e / dados["lambda"]
                 c_camada = (e * dados["densidade"] * dados["calor_espe"])
