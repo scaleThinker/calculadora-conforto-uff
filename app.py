@@ -24,7 +24,7 @@ materiais_padrao = {
     
     "Argamassa cimento/areia (Reboco)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "esp_padrao": 2.5, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Argamassa de cal e areia": {"lambda": 0.85, "densidade": 1700, "calor_espe": 1.00, "esp_padrao": 2.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
-    "Contrapiso (Argamassa de cimento)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "esp_padrao": 3.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
+    "Contrapiso (Argamassa de cimento)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "esp_padrao": 2.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Gesso liso para revestimento": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "esp_padrao": 1.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Pedra natural para revestimento": {"lambda": 2.40, "densidade": 2600, "calor_espe": 1.00, "esp_padrao": 3.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Piso cerâmico / Azulejo": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 0.75, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
