@@ -24,15 +24,18 @@ materiais_padrao = {
     
     "Argamassa cimento/areia (Reboco)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "esp_padrao": 2.5, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Argamassa de cal e areia": {"lambda": 0.85, "densidade": 1700, "calor_espe": 1.00, "esp_padrao": 2.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
+    "Contrapiso (Argamassa de cimento)": {"lambda": 1.15, "densidade": 2000, "calor_espe": 1.00, "esp_padrao": 3.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Gesso liso para revestimento": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "esp_padrao": 1.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Pedra natural para revestimento": {"lambda": 2.40, "densidade": 2600, "calor_espe": 1.00, "esp_padrao": 3.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
+    "Piso cerâmico / Azulejo": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 1.0, "bloqueado": False, "cat": "Revestimentos e Argamassas"},
     "Placa de gesso acartonado (Drywall)": {"lambda": 0.21, "densidade": 800, "calor_espe": 1.00, "esp_padrao": 1.25, "bloqueado": True, "cat": "Revestimentos e Argamassas"},
     
     "Camada de impermeabilização (Asfalto)": {"lambda": 0.22, "densidade": 1100, "calor_espe": 1.00, "esp_padrao": 0.4, "bloqueado": True, "cat": "Coberturas e Forros"},
+    "Forro de gesso (Placa plaqueada)": {"lambda": 0.35, "densidade": 1000, "calor_espe": 1.00, "esp_padrao": 1.2, "bloqueado": True, "cat": "Coberturas e Forros"},
     "Forro ou tábua de madeira": {"lambda": 0.13, "densidade": 600, "calor_espe": 1.34, "esp_padrao": 1.0, "bloqueado": False, "cat": "Coberturas e Forros"},
     "Telha cerâmica": {"lambda": 1.05, "densidade": 1800, "calor_espe": 0.92, "esp_padrao": 1.0, "bloqueado": True, "cat": "Coberturas e Forros"},
-    "Telha de fibrocimento": {"lambda": 0.65, "densidade": 1900, "calor_espe": 0.84, "esp_padrao": 0.6, "bloqueado": True, "cat": "Coberturas e Forros"},
-    "Telha metálica simples (0.5 mm)": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "esp_padrao": 0.05, "bloqueado": True, "cat": "Coberturas e Forros"},
+    "Telha de fibrocimento": {"lambda": 0.65, "densidade": 1900, "calor_espe": 0.84, "esp_padrao": 0.8, "bloqueado": True, "cat": "Coberturas e Forros"},
+    "Telha metálica simples": {"lambda": 58.00, "densidade": 7800, "calor_espe": 0.46, "esp_padrao": 0.1, "bloqueado": True, "cat": "Coberturas e Forros"},
     "Telha sanduíche (EPS 30 mm)": {"lambda": 0.038, "densidade": 40, "calor_espe": 1.40, "esp_padrao": 3.1, "bloqueado": True, "cat": "Coberturas e Forros"},
     "Telha sanduíche (PU 30 mm)": {"lambda": 0.028, "densidade": 45, "calor_espe": 1.40, "esp_padrao": 3.1, "bloqueado": True, "cat": "Coberturas e Forros"},
     
@@ -55,6 +58,7 @@ materiais_padrao = {
     "Solo compactado (Taipa/Adobe)": {"lambda": 1.00, "densidade": 1800, "calor_espe": 1.00, "esp_padrao": 30.0, "bloqueado": False, "cat": "Outros Materiais"},
     "Vidro comum": {"lambda": 1.00, "densidade": 2500, "calor_espe": 0.80, "esp_padrao": 0.6, "bloqueado": True, "cat": "Outros Materiais"}
 }
+
 
 #Sessão 4
 
