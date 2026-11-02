@@ -139,7 +139,7 @@ if deve_bloquear and not override_espessura:
 else:
     espessura_sel = st.number_input("Espessura (cm):", min_value=0.1, max_value=100.0, value=espessura_inicial, step=0.5)
 
-if st.button("Adicionar Camada"):
+if st.button("Adicionar Camada", type="primary"):
     if material_sel:
         st.session_state.camadas.append({"material": material_sel, "espessura": espessura_sel})
         st.rerun()
